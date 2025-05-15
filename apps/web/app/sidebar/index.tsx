@@ -12,6 +12,8 @@ import {
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import BuildIcon from "@mui/icons-material/Build";
 import InfoIcon from "@mui/icons-material/Info";
+import SendIcon from "@mui/icons-material/Send";
+import RouteIcon from '@mui/icons-material/Route';
 import { useRouter } from "next/navigation";
 
 const drawerWidth = 240;
@@ -23,6 +25,8 @@ export const Sidebar: React.FC = () => {
     { text: "Dashboard", icon: <DashboardIcon />, path: "/" },
     { text: "Deployer", icon: <BuildIcon />, path: "/deployer" },
     { text: "Deployments", icon: <InfoIcon />, path: "/deployments" },
+    { text: "Send", icon: <SendIcon />, path: "/sendTokens" },
+    { text: "Transfers", icon: <RouteIcon />, path: "/transfers" },
   ];
 
   return (
