@@ -104,5 +104,18 @@ export const theme = createTheme({
         },
       },
     },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          color: "#B6AD9050",
+          "&.MuiIconButton-outlined": {
+            transition: "all 0.3s ease",
+            "&:hover": {
+              backgroundColor: "#C2C5AA50",
+            },
+          },
+        },
+      },
+    },
   },
 });

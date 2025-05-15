@@ -1,8 +1,16 @@
 import { useFormContext, useFieldArray } from "react-hook-form";
-import { Grid, Button, Typography, Divider, Box } from "@mui/material";
+import {
+  Grid,
+  Button,
+  Typography,
+  Divider,
+  Box,
+  IconButton,
+} from "@mui/material";
 import { QuoteFormValues } from "..";
 import { DistributionFields } from "../../components/distributionFields";
 import AddIcon from "@mui/icons-material/Add";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
 export const Step3 = () => {
   const { control } = useFormContext<QuoteFormValues>();
@@ -15,9 +23,18 @@ export const Step3 = () => {
   return (
     <Grid container spacing={4}>
       <Grid size={12}>
-        <Typography variant="h6" gutterBottom>
-          Token Distribution
-        </Typography>
+        <Grid container alignContent={"center"}>
+          <Grid>
+            <Typography variant="h6" gutterBottom>
+              Token Distribution
+            </Typography>
+          </Grid>
+          <Grid>
+            <IconButton>
+              <HelpOutlineIcon fontSize="small" />
+            </IconButton>
+          </Grid>
+        </Grid>
 
         <Grid container spacing={2}>
           {fields.map((field, index) => (

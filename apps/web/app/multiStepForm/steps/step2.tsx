@@ -1,4 +1,5 @@
 import { useFormContext, Controller } from "react-hook-form";
+import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import {
   Grid,
   Checkbox,
@@ -6,6 +7,7 @@ import {
   Typography,
   Box,
   Divider,
+  IconButton,
 } from "@mui/material";
 import { QuoteFormValues } from "..";
 
@@ -48,6 +50,9 @@ export const Step2 = () => {
                 )}
               />
               <Typography variant="body2">Transfer ownership</Typography>
+              <IconButton>
+                <HelpOutlineIcon fontSize="small" />
+              </IconButton>
             </Box>
           </Grid>
 

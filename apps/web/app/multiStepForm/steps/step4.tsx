@@ -132,7 +132,7 @@ export const Step4 = () => {
         <SimpleSummaryRow label="Name" value={resume.name} />
         <SimpleSummaryRow label="Protocol" value={resume.protocol} />
         <SimpleSummaryRow label="Symbol" value={resume.symbol} />
-        <ArraySummaryRow label="Distribution" value={resume.distributions} />
+        {/* <ArraySummaryRow label="Distribution" value={resume.distributions} /> */}
       </Grid>
 
       <Grid size={12}>

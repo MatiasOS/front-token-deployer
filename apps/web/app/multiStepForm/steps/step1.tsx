@@ -20,7 +20,7 @@ export const BLOCKCHAINS = [
   { label: "Arbitrum", value: "arbitrum", icon: "arbitrum.svg" },
 ];
 
-const protocols = ["OFT"];
+const protocols = ["OFT", "XRC20"];
 
 export const Step1 = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -128,6 +128,9 @@ export const Step1 = () => {
                           }}
                         />
                         <Typography variant="body2">{option}</Typography>
+                        <IconButton>
+                          <HelpOutlineIcon fontSize="small" />
+                        </IconButton>
                       </Box>
                     </Grid>
                   ))}
@@ -145,9 +148,18 @@ export const Step1 = () => {
         <Divider style={{ width: "100%" }} />
 
         <Grid size={12}>
-          <Typography variant="h6" gutterBottom>
-            Token Personalization
-          </Typography>
+          <Grid container alignContent={"center"}>
+            <Grid>
+              <Typography variant="h6" gutterBottom>
+                Token Personalization
+              </Typography>
+            </Grid>
+            <Grid>
+              <IconButton>
+                <HelpOutlineIcon fontSize="small" />
+              </IconButton>
+            </Grid>
+          </Grid>
 
           <Grid container spacing={2}>
             <Grid size={{ xs: 12, sm: 6 }}>
@@ -162,7 +174,7 @@ export const Step1 = () => {
                 fullWidth
                 error={!!errors.name}
                 helperText={errors.name?.message}
-                placeholder="TOKEN"
+                placeholder="AL TOKE TOKEN"
                 variant="standard"
               />
             </Grid>
@@ -179,7 +191,7 @@ export const Step1 = () => {
                 fullWidth
                 error={!!errors.symbol}
                 helperText={errors.symbol?.message}
-                placeholder="TKN"
+                placeholder="ATK"
                 variant="standard"
               />
             </Grid>
