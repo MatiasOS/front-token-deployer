@@ -78,7 +78,7 @@ export const MultiStepForm = () => {
     setTimeout(() => {
       setLoading(false);
       onSubmit();
-      router.push("/info");
+      router.push("/deployments");
     }, 2000);
   };
 
@@ -152,7 +152,7 @@ export const MultiStepForm = () => {
                   {loading ? (
                     <CircularProgress size={24} color="inherit" />
                   ) : (
-                    "Pay"
+                    "Pay with Credit Card"
                   )}
                 </Button>
               ) : (
