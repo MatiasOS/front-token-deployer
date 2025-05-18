@@ -1,41 +1,67 @@
 "use client";
-import { Drawer, Box, Typography, TextField, Stack } from "@mui/material";
+import { Drawer, Box, Typography, Stack } from "@mui/material";
+import { useState, useEffect } from "react";
 
 interface NebulaChatDrawerProps {
   open: boolean;
   onClose: () => void;
-  blockchain: string | null;
+  theme: string | null;
 }
-
-const blockchainDescriptions: Record<string, string> = {
-  mantle:
-    "Mantle is an Ethereum Layer 2 (L2) blockchain network designed to offer faster transaction speeds and lower fees while leveraging Ethereum's mainnet security. It utilizes a modular architecture and rollup technology to scale decentralized applications beyond the capabilities of Ethereum L1.\n\nKey facts about Mantle:\n\nNetwork Structure: Mantle includes the Mantle Network (Layer 2 chain), Mantle Treasury, and is governed by token holders through decentralized proposals.\nTechnology: It is optimized for mass adoption of decentralized, token-governed applications. Its modular rollup design allows for scalability and flexibility.\nToken: The native token is MNT (previously BIT, after the merger with BitDAO). Mantle also developed mETH, a liquid staking derivative for staked ETH on Ethereum mainnet.\nEcosystem: Mantle has processed tens of millions of transactions, launched a large ecosystem fund (proposed at $200 million) to support dApp development, and integrates a variety of DeFi protocols.\nGovernance: Projects and funding are managed via proposals and on-chain voting by token holders.\n\nMantle’s focus is to combine the security of Ethereum with the scalability and efficiency of a Layer 2. It also supports liquid staking and aims for open, decentralized innovation.",
-  ethereum:
-    "Ethereum is a decentralized, open-source blockchain platform launched in 2015. It allows anyone to deploy and operate smart contracts—self-executing code with logic written directly on the blockchain—and decentralized applications (dApps). Ethereum introduced the concept of programmable money and assets using its cryptocurrency, Ether (ETH), which is used for transaction fees and computational services.\n\nKey characteristics:\n\nSmart Contracts: Code stored and executed on-chain, removing the need for centralized intermediaries.\nNative Currency: Ether (ETH) powers transactions and contract interactions.\nTuring-complete Virtual Machine: The Ethereum Virtual Machine (EVM) enables complex logic and universal programmability.\nDeFi & NFTs: Ethereum hosts a rich ecosystem of decentralized finance (DeFi), non-fungible tokens (NFTs), DAOs, and gaming protocols.\nConsensus Mechanism: Ethereum transitioned from Proof-of-Work to Proof-of-Stake for greater scalability and lower environmental impact.\n\nWould you like to know about how to interact with Ethereum, its smart contract capabilities, or its ecosystem?",
-  arbitrum:
-    'It appears you meant "Arbitrum," not "Artbitrum."\n\nArbitrum is a leading Layer 2 scaling solution for Ethereum. Here’s what you need to know:\n\nPurpose: Enables faster and much cheaper Ethereum transactions by moving computation and data off the main Ethereum chain ("off-chain") and then settling results on Ethereum using a system called "optimistic rollups."\nRollup Technology: Arbitrum batches many transactions, reducing congestion and significantly lowering gas fees compared to using Ethereum Layer 1 directly.\nChains:\n- Arbitrum One is the main, general-purpose chain using optimistic rollups.\n- Arbitrum Nova is optimized for high transaction volume use cases like gaming and social apps, using a related protocol (AnyTrust).\nEcosystem: Supports a wide range of decentralized applications (DeFi, NFTs, gaming, etc.) and is fully compatible with Ethereum smart contracts written in Solidity.\nToken: Arbitrum has its own native governance token, $ARB, used for voting on protocol upgrades and community decisions.\nMarket position: Arbitrum is the largest Ethereum Layer 2 solution by market share and Total Value Locked (TVL), often processing billions of dollars in assets.\n\nIf you have a question about a different project called "Artbitrum" please clarify. Would you like to know how to use Arbitrum, bridge assets, or explore its dApps?',
-};
 
 export const NebulaChatDrawer = ({
   open,
   onClose,
-  blockchain,
+  theme,
 }: NebulaChatDrawerProps) => {
-  const question = blockchain ? `What is ${capitalize(blockchain)}?` : "";
-  const answer = blockchain
-    ? blockchainDescriptions[blockchain.toLowerCase()] || "No info available."
+  const [answer, setAnswer] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const question = theme
+    ? `What is ${capitalize(theme)}? Give me a short answer for people that is not an expert`
     : "";
+  const nebulaUrl = process.env.NEXT_PUBLIC_NEBULA_URL!;
+
+  console.log("nebulaUrl", nebulaUrl);
+
+  useEffect(() => {
+    if (!open || !question) return;
+
+    let isMounted = true;
+    const fetchAnswer = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch("http://localhost:3000/nebula", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: question }),
+        });
+        const data = await res.json();
+        console.log("data", data);
+        if (isMounted) setAnswer(data.message ?? "No answer returned.");
+      } catch (err) {
+        console.error(err);
+        if (isMounted) setAnswer("Error fetching answer.");
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchAnswer();
+    return () => {
+      isMounted = false;
+    };
+  }, [open, question, nebulaUrl]);
 
   return (
     <Drawer anchor="right" open={open} onClose={onClose}>
       <Box
-        p={3}
+        p={2}
         width={450}
         display="flex"
         flexDirection="column"
         height="100%"
       >
-        <Stack spacing={2} mt={4} flex={1}>
+        <Stack spacing={2} flex={1}>
           <Box>
             <Typography variant="subtitle2" gutterBottom>
               Assistant:
@@ -46,10 +72,14 @@ export const NebulaChatDrawer = ({
               borderColor="custom.sage"
               borderRadius={2}
             >
-              <Typography variant="body1">{answer}</Typography>
+              {loading ? (
+                <Typography variant="body2">Loading...</Typography>
+              ) : (
+                <Typography variant="body1">{answer}</Typography>
+              )}
             </Box>
           </Box>
-          <Box>
+          {/* <Box>
             <Typography variant="subtitle2" gutterBottom>
               You asked:
             </Typography>
@@ -57,13 +87,9 @@ export const NebulaChatDrawer = ({
               fullWidth
               value={question}
               variant="outlined"
-              slotProps={{
-                input: {
-                  readOnly: true,
-                },
-              }}
+              InputProps={{ readOnly: true }}
             />
-          </Box>
+          </Box> */}
         </Stack>
         <Box mt={1} display="flex" alignItems="center" flexDirection="column">
           <Typography>Powered By</Typography>

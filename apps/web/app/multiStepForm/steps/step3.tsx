@@ -12,7 +12,11 @@ import { DistributionFields } from "../../components/distributionFields";
 import AddIcon from "@mui/icons-material/Add";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 
-export const Step3 = () => {
+interface Step3Props {
+  onOpenDrawer: (theme: string) => void;
+}
+
+export const Step3 = ({ onOpenDrawer }: Step3Props) => {
   const { control } = useFormContext<QuoteFormValues>();
 
   const { fields, append, remove } = useFieldArray({
@@ -30,7 +34,10 @@ export const Step3 = () => {
             </Typography>
           </Grid>
           <Grid>
-            <IconButton>
+            <IconButton
+              size="small"
+              onClick={() => onOpenDrawer("the token distribution on a token")}
+            >
               <HelpOutlineIcon fontSize="small" />
             </IconButton>
           </Grid>
