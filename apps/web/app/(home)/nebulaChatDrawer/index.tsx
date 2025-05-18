@@ -1,7 +1,7 @@
 "use client";
 import { Drawer, Box, Typography, TextField, Stack } from "@mui/material";
 
-interface BlockchainInfoDrawerProps {
+interface NebulaChatDrawerProps {
   open: boolean;
   onClose: () => void;
   blockchain: string | null;
@@ -16,11 +16,11 @@ const blockchainDescriptions: Record<string, string> = {
     'It appears you meant "Arbitrum," not "Artbitrum."\n\nArbitrum is a leading Layer 2 scaling solution for Ethereum. Here’s what you need to know:\n\nPurpose: Enables faster and much cheaper Ethereum transactions by moving computation and data off the main Ethereum chain ("off-chain") and then settling results on Ethereum using a system called "optimistic rollups."\nRollup Technology: Arbitrum batches many transactions, reducing congestion and significantly lowering gas fees compared to using Ethereum Layer 1 directly.\nChains:\n- Arbitrum One is the main, general-purpose chain using optimistic rollups.\n- Arbitrum Nova is optimized for high transaction volume use cases like gaming and social apps, using a related protocol (AnyTrust).\nEcosystem: Supports a wide range of decentralized applications (DeFi, NFTs, gaming, etc.) and is fully compatible with Ethereum smart contracts written in Solidity.\nToken: Arbitrum has its own native governance token, $ARB, used for voting on protocol upgrades and community decisions.\nMarket position: Arbitrum is the largest Ethereum Layer 2 solution by market share and Total Value Locked (TVL), often processing billions of dollars in assets.\n\nIf you have a question about a different project called "Artbitrum" please clarify. Would you like to know how to use Arbitrum, bridge assets, or explore its dApps?',
 };
 
-export const BlockchainInfoDrawer = ({
+export const NebulaChatDrawer = ({
   open,
   onClose,
   blockchain,
-}: BlockchainInfoDrawerProps) => {
+}: NebulaChatDrawerProps) => {
   const question = blockchain ? `What is ${capitalize(blockchain)}?` : "";
   const answer = blockchain
     ? blockchainDescriptions[blockchain.toLowerCase()] || "No info available."

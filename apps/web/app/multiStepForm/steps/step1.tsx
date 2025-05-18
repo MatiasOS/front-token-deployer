@@ -12,7 +12,7 @@ import Image from "next/image";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { QuoteFormValues } from "..";
 import { useState } from "react";
-import { BlockchainInfoDrawer } from "../../(home)/blockchainInfoDrawer";
+import { NebulaChatDrawer } from "../../(home)/nebulaChatDrawer";
 
 export const BLOCKCHAINS = [
   { label: "Mantle", value: "mantle", icon: "/mantle.svg" },
@@ -198,7 +198,7 @@ export const Step1 = () => {
           </Grid>
         </Grid>
       </Grid>
-      <BlockchainInfoDrawer
+      <NebulaChatDrawer
         open={drawerOpen}
         onClose={handleCloseDrawer}
         blockchain={selectedBlockchain}
