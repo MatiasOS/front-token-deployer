@@ -103,7 +103,7 @@ export const MultiStepForm = () => {
       case 2:
         return <Step3 onOpenDrawer={handleOpenDrawer} />;
       case 3:
-        return <Step4 onOpenDrawer={handleOpenDrawer} />;
+        return <Step4 />;
       default:
         return null;
     }
