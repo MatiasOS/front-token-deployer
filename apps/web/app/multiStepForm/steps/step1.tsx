@@ -11,8 +11,6 @@ import {
 import Image from "next/image";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { QuoteFormValues } from "..";
-import { useState } from "react";
-import { BlockchainInfoDrawer } from "../../(home)/blockchainInfoDrawer";
 
 export const BLOCKCHAINS = [
   { label: "Mantle", value: "mantle", icon: "/mantle.svg" },
@@ -22,27 +20,16 @@ export const BLOCKCHAINS = [
 
 const protocols = ["OFT", "XRC20"];
 
-export const Step1 = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedBlockchain, setSelectedBlockchain] = useState<string | null>(
-    null,
-  );
+interface Step1Props {
+  onOpenDrawer: (theme: string) => void;
+}
 
+export const Step1 = ({ onOpenDrawer }: Step1Props) => {
   const {
     register,
     control,
     formState: { errors },
   } = useFormContext<QuoteFormValues>();
-
-  const handleOpenDrawer = (blockchain: string) => {
-    setSelectedBlockchain(blockchain);
-    setDrawerOpen(true);
-  };
-
-  const handleCloseDrawer = () => {
-    setDrawerOpen(false);
-    setSelectedBlockchain(null);
-  };
 
   return (
     <>
@@ -84,7 +71,7 @@ export const Step1 = () => {
                         <Typography variant="body2">{label}</Typography>
                         <IconButton
                           size="small"
-                          onClick={() => handleOpenDrawer(value)}
+                          onClick={() => onOpenDrawer(value)}
                         >
                           <HelpOutlineIcon fontSize="small" />
                         </IconButton>
@@ -128,7 +115,10 @@ export const Step1 = () => {
                           }}
                         />
                         <Typography variant="body2">{option}</Typography>
-                        <IconButton>
+                        <IconButton
+                          size="small"
+                          onClick={() => onOpenDrawer(option)}
+                        >
                           <HelpOutlineIcon fontSize="small" />
                         </IconButton>
                       </Box>
@@ -155,7 +145,10 @@ export const Step1 = () => {
               </Typography>
             </Grid>
             <Grid>
-              <IconButton>
+              <IconButton
+                size="small"
+                onClick={() => onOpenDrawer("Token name and Token Symbol")}
+              >
                 <HelpOutlineIcon fontSize="small" />
               </IconButton>
             </Grid>
@@ -198,11 +191,6 @@ export const Step1 = () => {
           </Grid>
         </Grid>
       </Grid>
-      <BlockchainInfoDrawer
-        open={drawerOpen}
-        onClose={handleCloseDrawer}
-        blockchain={selectedBlockchain}
-      />
     </>
   );
 };

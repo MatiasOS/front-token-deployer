@@ -20,8 +20,14 @@ export const DistributionFields = ({
 }: DistributionFieldsProps) => {
   const {
     control,
+    watch,
     formState: { errors },
   } = useFormContext<QuoteFormValues>();
+
+  const selectedChains = watch("blockchain");
+  const availableChains = BLOCKCHAINS.filter((b) =>
+    selectedChains.includes(b.value),
+  );
 
   return (
     <Grid container spacing={1} mb={1} alignItems={"center"}>
@@ -39,7 +45,7 @@ export const DistributionFields = ({
               error={!!errors.distributions?.[index]?.address}
               helperText={errors.distributions?.[index]?.address?.message}
             >
-              {BLOCKCHAINS.map(({ label, value, icon }) => (
+              {availableChains.map(({ label, value, icon }) => (
                 <MenuItem key={value} value={value}>
                   <Image
                     src={icon}

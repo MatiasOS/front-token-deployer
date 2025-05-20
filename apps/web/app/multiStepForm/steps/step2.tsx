@@ -11,7 +11,11 @@ import {
 } from "@mui/material";
 import { QuoteFormValues } from "..";
 
-export const Step2 = () => {
+interface Step2Props {
+  onOpenDrawer: (theme: string) => void;
+}
+
+export const Step2 = ({ onOpenDrawer }: Step2Props) => {
   const {
     control,
     setValue,
@@ -50,7 +54,12 @@ export const Step2 = () => {
                 )}
               />
               <Typography variant="body2">Transfer ownership</Typography>
-              <IconButton>
+              <IconButton
+                size="small"
+                onClick={() =>
+                  onOpenDrawer("the transfer ownership prop on a token")
+                }
+              >
                 <HelpOutlineIcon fontSize="small" />
               </IconButton>
             </Box>
