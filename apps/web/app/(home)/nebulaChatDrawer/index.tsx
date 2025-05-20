@@ -21,8 +21,6 @@ export const NebulaChatDrawer = ({
     : "";
   const nebulaUrl = process.env.NEXT_PUBLIC_NEBULA_URL!;
 
-  console.log("nebulaUrl", nebulaUrl);
-
   useEffect(() => {
     if (!open || !question) return;
 
@@ -30,7 +28,7 @@ export const NebulaChatDrawer = ({
     const fetchAnswer = async () => {
       setLoading(true);
       try {
-        const res = await fetch("http://localhost:3000/nebula", {
+        const res = await fetch(nebulaUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: question }),
@@ -64,7 +62,7 @@ export const NebulaChatDrawer = ({
         <Stack spacing={2} flex={1}>
           <Box>
             <Typography variant="subtitle2" gutterBottom>
-              Assistant:
+              Nebula says:
             </Typography>
             <Box
               border={0.5}
@@ -79,17 +77,6 @@ export const NebulaChatDrawer = ({
               )}
             </Box>
           </Box>
-          {/* <Box>
-            <Typography variant="subtitle2" gutterBottom>
-              You asked:
-            </Typography>
-            <TextField
-              fullWidth
-              value={question}
-              variant="outlined"
-              InputProps={{ readOnly: true }}
-            />
-          </Box> */}
         </Stack>
         <Box mt={1} display="flex" alignItems="center" flexDirection="column">
           <Typography>Powered By</Typography>
