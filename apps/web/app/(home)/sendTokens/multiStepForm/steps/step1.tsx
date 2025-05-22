@@ -1,9 +1,5 @@
 import { useFormContext, Controller } from "react-hook-form";
-import {
-  Grid,
-  TextField,
-  MenuItem,
-} from "@mui/material";
+import { Grid, TextField, MenuItem } from "@mui/material";
 import Image from "next/image";
 import { QuoteFormValues } from "..";
 
@@ -89,11 +85,7 @@ export const Step1 = () => {
           control={control}
           rules={{ required: "Address required" }}
           render={({ field }) => (
-            <TextField
-              {...field}
-              label="Address"
-              fullWidth
-            />
+            <TextField {...field} label="Address" fullWidth />
           )}
         />
       </Grid>

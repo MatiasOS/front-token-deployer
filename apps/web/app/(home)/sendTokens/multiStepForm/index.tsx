@@ -24,10 +24,10 @@ export type TokenDistribution = {
 };
 
 export type QuoteFormValues = {
-  blockchainFrom: string
-  blockchainTo: string
-  addressTo: string
-  amount: number
+  blockchainFrom: string;
+  blockchainTo: string;
+  addressTo: string;
+  amount: number;
 };
 
 export const MultiStepForm = () => {
@@ -91,7 +91,7 @@ export const MultiStepForm = () => {
               Send cross-chain
             </Typography>
             <Typography variant="body2" color="custom.sage" mb={3}>
-              Please fill the form below to make a cross-chain transfer. 
+              Please fill the form below to make a cross-chain transfer.
             </Typography>
 
             <Stepper activeStep={activeStep} alternativeLabel sx={{ mb: 3 }}>

@@ -13,7 +13,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import BuildIcon from "@mui/icons-material/Build";
 import InfoIcon from "@mui/icons-material/Info";
 import SendIcon from "@mui/icons-material/Send";
-import RouteIcon from '@mui/icons-material/Route';
+import RouteIcon from "@mui/icons-material/Route";
 import { useRouter } from "next/navigation";
 
 const drawerWidth = 240;
