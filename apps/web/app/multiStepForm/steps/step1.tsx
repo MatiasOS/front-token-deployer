@@ -13,9 +13,27 @@ import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { QuoteFormValues } from "..";
 
 export const BLOCKCHAINS = [
-  { label: "Mantle", value: "mantle", icon: "/mantle.svg" },
-  { label: "Ethereum", value: "ethereum", icon: "/ethereum.svg" },
-  { label: "Arbitrum", value: "arbitrum", icon: "arbitrum.svg" },
+  {
+    label: "Mantle",
+    value: "mantle",
+    icon: "/mantle.svg",
+    contractCreation: 0.19448711,
+    wiring: 0.06457882,
+  },
+  {
+    label: "Ethereum",
+    value: "ethereum",
+    icon: "/ethereum.svg",
+    contractCreation: 0.02405016,
+    wiring: 0.00348915,
+  },
+  {
+    label: "Arbitrum",
+    value: "arbitrum",
+    icon: "/arbitrum.svg",
+    contractCreation: 0.02405016,
+    wiring: 0.000008746,
+  },
 ];
 
 const protocols = ["OFT", "XRC20"];

@@ -29,8 +29,6 @@ export type QuoteFormValues = {
   protocol: string;
   name: string;
   symbol: string;
-  initialSupply: number;
-  distributionType: "normal" | "later" | "mint_later";
   distributions: TokenDistribution[];
   reserveAmount?: number;
   owneable?: boolean;
@@ -48,8 +46,6 @@ export const MultiStepForm = () => {
       protocol: "",
       name: "",
       symbol: "",
-      initialSupply: 0,
-      distributionType: "normal",
       distributions: [
         {
           blockchain: "",
