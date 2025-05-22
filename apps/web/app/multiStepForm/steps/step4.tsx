@@ -72,12 +72,13 @@ const ArraySummaryRow = ({ label, value }: ArraySummaryRowProps) => {
   );
 };
 
-const formatStringToLocalCurrency = (value: number) => {
+const formatToUSDCurrency = (value: number) => {
   const formatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
+    currencyDisplay: "code",
   });
-  return formatter.format(parseFloat(value.toFixed(2)));
+  return formatter.format(value);
 };
 
 async function getEstimatesFromApi(
@@ -167,13 +168,13 @@ export const Step4 = () => {
                   <SimpleSummaryRow label={blockchain} />
                   <SimpleSummaryRow
                     label="Contract Creation"
-                    value={formatStringToLocalCurrency(
+                    value={formatToUSDCurrency(
                       contractCreationEstimate,
                     )}
                   />
                   <SimpleSummaryRow
                     label="Wiring"
-                    value={formatStringToLocalCurrency(wiringEstimate)}
+                    value={formatToUSDCurrency(wiringEstimate)}
                   />
                   <Divider sx={{ my: 2, borderStyle: "dashed" }} />
                 </React.Fragment>
@@ -181,7 +182,7 @@ export const Step4 = () => {
             )}
             <SimpleSummaryRow
               label="Total"
-              value={formatStringToLocalCurrency(totalCost)}
+              value={formatToUSDCurrency(totalCost)}
             />
           </>
         )}

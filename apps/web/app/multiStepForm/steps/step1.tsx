@@ -30,7 +30,7 @@ export const BLOCKCHAINS = [
   {
     label: "Arbitrum",
     value: "arbitrum",
-    icon: "arbitrum.svg",
+    icon: "/arbitrum.svg",
     contractCreation: 0.02405016,
     wiring: 0.000008746,
   },
