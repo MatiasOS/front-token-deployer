@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import {
   Grid,
@@ -8,28 +9,20 @@ import {
   Box,
 } from "@mui/material";
 import { QuoteFormValues } from "..";
-import React, { useEffect, useState } from "react";
+import { BLOCKCHAINS } from "./step1";
 
-const BLOCKCHAIN_COSTS = [
-  {
-    blockchainName: "ethereum",
-    value: 2533.74,
-    contractCreation: 0.02405016,
-    wiring: 0.00348915,
-  },
-  {
-    blockchainName: "arbitrum",
-    value: 2533.74,
-    contractCreation: 0.02405016,
-    wiring: 0.000008746,
-  },
-  {
-    blockchainName: "mantle",
-    value: 0.7575,
-    contractCreation: 0.19448711,
-    wiring: 0.06457882,
-  },
-];
+interface EstimateResponse {
+  blockchain: string;
+  contractCreationEstimate: number;
+  wiringEstimate: number;
+}
+
+interface EstimatePayload {
+  blockchain: string;
+  contractCreation: number;
+  wiring: number;
+  amount: number;
+}
 
 interface SimpleSummaryRowProps {
   label: string;
@@ -79,44 +72,65 @@ const ArraySummaryRow = ({ label, value }: ArraySummaryRowProps) => {
   );
 };
 
+const formatStringToLocalCurrency = (value: number) => {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+  return formatter.format(parseFloat(value.toFixed(2)));
+};
+
+async function getEstimatesFromApi(
+  payload: EstimatePayload[],
+): Promise<EstimateResponse[]> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/estimates`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ estimates: payload }),
+  });
+  if (!res.ok) {
+    throw new Error(`Error fetching estimates: ${res.statusText}`);
+  }
+  return res.json();
+}
+
 export const Step4 = () => {
-  const [estimate, setEstimate] = useState<number>(0);
   const { getValues } = useFormContext<QuoteFormValues>();
   const resume = getValues();
 
+  const [estimates, setEstimates] = useState<EstimateResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setEstimate(100);
-    }, 1000);
+    const loadEstimates = async () => {
+      try {
+        const payload: EstimatePayload[] = resume.distributions.map((dist) => {
+          const bc = BLOCKCHAINS.find((b) => b.value === dist.blockchain);
+          if (!bc)
+            throw new Error(`Blockchain ${dist.blockchain} not in config`);
+          return {
+            blockchain: dist.blockchain,
+            contractCreation: bc.contractCreation,
+            wiring: bc.wiring,
+            amount: dist.amount,
+          };
+        });
 
-    return () => clearTimeout(timeout);
-  }, []);
+        const data = await getEstimatesFromApi(payload);
+        setEstimates(data);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  function calculateContractCreation(
-    blockchain: string,
-    amount: number,
-  ): number {
-    const data = BLOCKCHAIN_COSTS.find((b) => b.blockchainName === blockchain);
-    if (!data) throw new Error("Blockchain not found");
+    loadEstimates();
+  }, [resume.distributions]);
 
-    return data.value * amount * data.contractCreation;
-  }
-
-  function calculateWiring(blockchain: string, amount: number): number {
-    const data = BLOCKCHAIN_COSTS.find((b) => b.blockchainName === blockchain);
-    if (!data) throw new Error("Blockchain not found");
-
-    return data.value * amount * data.wiring;
-  }
-
-  const totalCost = resume.distributions.reduce(
-    (sum, { blockchain, amount }) => {
-      return (
-        sum +
-        calculateContractCreation(blockchain, amount) +
-        calculateWiring(blockchain, amount)
-      );
-    },
+  const totalCost = estimates.reduce(
+    (sum, { contractCreationEstimate, wiringEstimate }) =>
+      sum + contractCreationEstimate + wiringEstimate,
     0,
   );
 
@@ -141,42 +155,34 @@ export const Step4 = () => {
         </Typography>
         <Divider sx={{ mb: 2 }} />
 
-        {estimate === 0 ? (
+        {loading ? (
           <Box sx={{ mt: 2 }}>
             <LinearProgress />
           </Box>
         ) : (
           <>
-            {resume.distributions.map((distribution, idx) => {
-              const baseKey = `${distribution.blockchain}-${idx}`;
-              return (
-                <React.Fragment key={baseKey}>
-                  <SimpleSummaryRow label={distribution.blockchain} />
+            {estimates.map(
+              ({ blockchain, contractCreationEstimate, wiringEstimate }) => (
+                <React.Fragment key={blockchain}>
+                  <SimpleSummaryRow label={blockchain} />
                   <SimpleSummaryRow
-                    key={`${baseKey}-contract`}
                     label="Contract Creation"
-                    value={calculateContractCreation(
-                      distribution.blockchain,
-                      distribution.amount,
-                    ).toFixed(2)}
+                    value={formatStringToLocalCurrency(
+                      contractCreationEstimate,
+                    )}
                   />
                   <SimpleSummaryRow
-                    key={`${baseKey}-wiring`}
                     label="Wiring"
-                    value={calculateWiring(
-                      distribution.blockchain,
-                      distribution.amount,
-                    ).toFixed(2)}
+                    value={formatStringToLocalCurrency(wiringEstimate)}
                   />
-                  <Divider
-                    key={`${baseKey}-divider`}
-                    sx={{ mb: 2, mt: 2, borderStyle: "dashed" }}
-                  />
+                  <Divider sx={{ my: 2, borderStyle: "dashed" }} />
                 </React.Fragment>
-              );
-            })}
-
-            <SimpleSummaryRow label="Total" value={totalCost.toFixed(2)} />
+              ),
+            )}
+            <SimpleSummaryRow
+              label="Total"
+              value={formatStringToLocalCurrency(totalCost)}
+            />
           </>
         )}
       </Grid>
