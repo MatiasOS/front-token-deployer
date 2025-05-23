@@ -11,13 +11,17 @@ import {
   CircularProgress,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Step1, Step2, Step3, Step4 } from "./steps";
+import { Step1, Step2, Step3, Step4, Step5 } from "./steps";
 import { FormProvider, useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { NebulaChatDrawer } from "../(home)/nebulaChatDrawer";
-import { useDeploymentStore } from "../../stores/deploymentStore";
 
-const steps = ["Initial data", "Configurations", "Distribution", "Payments"];
+const steps = [
+  "Initial data",
+  "Configurations",
+  "Distribution",
+  "Payments",
+  "Summary",
+];
 
 export type TokenDistribution = {
   blockchain: string;
@@ -40,18 +44,17 @@ export const MultiStepForm = () => {
   const [loading, setLoading] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerTheme, setDrawerTheme] = useState<string | null>(null);
-  const router = useRouter();
   const methods = useForm<QuoteFormValues>({
     defaultValues: {
-      blockchain: [],
-      protocol: "",
-      name: "",
-      symbol: "",
+      blockchain: ["mantle"],
+      protocol: "OFT",
+      name: "ALTOKETOKEN",
+      symbol: "ATK",
       distributions: [
         {
-          blockchain: "",
-          address: "",
-          amount: 0,
+          blockchain: "mantle",
+          address: "0x123",
+          amount: 100,
         },
       ],
       reserveAmount: 0,
@@ -60,49 +63,9 @@ export const MultiStepForm = () => {
     },
   });
 
-  const setDeployments = useDeploymentStore((s) => s.setDeployments);
-
-  interface Deployment {
-    txHash: string;
-    blockchain: "ethereum" | "mantle" | "arbitrum";
-  }
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onSubmit = async (data: QuoteFormValues) => {
-    try {
-      // const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/oft`, {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(data),
-      // });
-      // if (!res.ok) throw new Error("Error creando OFT");
-      // const deployments = await res.json();
-      setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setLoading(false);
-      const deployments: Deployment[] = [
-        {
-          txHash:
-            "0x0ecbbba9a658b6912c7e38576e0ff43e25860cd6749774674823bde16c013adf",
-          blockchain: "ethereum",
-        },
-        {
-          txHash:
-            "0x53532cf7f9d97e131c6a023d91523af1950da3264242b2c00f9dfa0f6712b501",
-          blockchain: "mantle",
-        },
-        {
-          txHash:
-            "0xc05c8c959b45bb95b1bf82c1898540c121d3703c92d57f00f3a0dfebf00fb6fb",
-          blockchain: "arbitrum",
-        },
-      ];
-      setDeployments(deployments);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      router.push("/deployments");
-    }
+    handleNext();
   };
 
   const [activeStep, setActiveStep] = useState(0);
@@ -134,6 +97,8 @@ export const MultiStepForm = () => {
         return <Step3 onOpenDrawer={handleOpenDrawer} />;
       case 3:
         return <Step4 />;
+      case 4:
+        return <Step5 />;
       default:
         return null;
     }
@@ -176,38 +141,40 @@ export const MultiStepForm = () => {
 
               {renderStep()}
 
-              <Box mt={4} display="flex" justifyContent="space-between">
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={handleBack}
-                  disabled={activeStep === 0}
-                >
-                  Previous step
-                </Button>
-                {activeStep === steps.length - 1 ? (
+              {activeStep < steps.length - 1 && (
+                <Box mt={4} display="flex" justifyContent="space-between">
                   <Button
-                    variant="contained"
+                    variant="outlined"
                     color="secondary"
-                    onClick={methods.handleSubmit(onSubmit)}
-                    disabled={loading}
+                    onClick={handleBack}
+                    disabled={activeStep === 0}
                   >
-                    {loading ? (
-                      <CircularProgress size={24} color="inherit" />
-                    ) : (
-                      "Pay with Credit Card"
-                    )}
+                    Previous step
                   </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleNext}
-                  >
-                    Next step
-                  </Button>
-                )}
-              </Box>
+                  {activeStep === steps.length - 2 ? (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={methods.handleSubmit(onSubmit)}
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <CircularProgress size={24} color="inherit" />
+                      ) : (
+                        "Pay with Credit Card"
+                      )}
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleNext}
+                    >
+                      Next step
+                    </Button>
+                  )}
+                </Box>
+              )}
             </Paper>
           </Box>
         </form>
