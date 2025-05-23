@@ -12,7 +12,6 @@ export type Deployment = {
   blockchain: "ethereum" | "mantle" | "arbitrum";
 };
 
-
 export interface MerkleTreeData {
   [chainName: string]: {
     tree: string[];

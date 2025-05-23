@@ -45,16 +45,17 @@ export const MultiStepForm = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerTheme, setDrawerTheme] = useState<string | null>(null);
   const methods = useForm<QuoteFormValues>({
+    mode: "onBlur",
     defaultValues: {
-      blockchain: ["mantle"],
+      blockchain: [],
       protocol: "OFT",
-      name: "ALTOKETOKEN",
-      symbol: "ATK",
+      name: "",
+      symbol: "",
       distributions: [
         {
-          blockchain: "mantle",
-          address: "0x123",
-          amount: 100,
+          blockchain: "",
+          address: "",
+          amount: 0,
         },
       ],
       reserveAmount: 0,
@@ -169,6 +170,7 @@ export const MultiStepForm = () => {
                       variant="contained"
                       color="secondary"
                       onClick={handleNext}
+                      disabled={!methods.formState.isValid}
                     >
                       Next step
                     </Button>
