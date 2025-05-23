@@ -1,38 +1,105 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  Box,
-  Paper,
-  Typography,
-  LinearProgress,
-  Button,
-  Link,
-} from "@mui/material";
+import { Box, Paper, Typography, LinearProgress, Button } from "@mui/material";
 import { useRouter } from "next/navigation";
+import {
+  useDeploymentStore,
+  Deployment,
+} from "../../../stores/deploymentStore";
+
+interface SmartContract {
+  contractAddress: string;
+  blockchain: "ethereum" | "mantle" | "arbitrum";
+}
+
+interface DistributeResult {
+  status: string;
+}
 
 export default function Home() {
-  const [deployments, setDeployments] = useState<string | null>(null);
-  const [configurations, setConfigurations] = useState<string | null>(null);
+  const [smartContracts, setSmartContracts] = useState<SmartContract[]>([]);
+  const [configStatus, setConfigStatus] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const deployments = useDeploymentStore((s) => s.deployments);
   const router = useRouter();
 
+  // Paso 1: Obtener smart contracts de los deployments
   useEffect(() => {
-    const deploymentTimeout = setTimeout(() => {
-      setDeployments("All services deployed successfully.");
-    }, 2000);
-
-    return () => clearTimeout(deploymentTimeout);
-  }, []);
-
-  useEffect(() => {
-    if (deployments) {
-      const configTimeout = setTimeout(() => {
-        setConfigurations("Completed.");
-      }, 2000);
-
-      return () => clearTimeout(configTimeout);
+    async function fetchAllSmartContracts(
+      deployments: Deployment[],
+    ): Promise<SmartContract[]> {
+      return Promise.all(
+        deployments.map((d) => getSmartContract(d.txHash, d.blockchain)),
+      );
     }
+
+    async function loadSmartContracts() {
+      if (!deployments) {
+        return;
+      }
+      try {
+        const smartContractsFetched = await fetchAllSmartContracts(deployments);
+        setSmartContracts(smartContractsFetched);
+      } catch (err) {
+        console.error("Error fetching smart contracts:", err);
+      }
+    }
+    if (deployments) loadSmartContracts();
   }, [deployments]);
+
+  // Paso 3: Con smart contracts, llamar a distribute (solo cuando todos estén)
+  useEffect(() => {
+    async function distributeContracts() {
+      if (!smartContracts.length) return;
+      try {
+        // const result = await distribute(smartContracts);
+        setConfigStatus("Ok");
+      } catch (err) {
+        console.error("Error in distribute:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    distributeContracts();
+  }, [smartContracts]);
+
+  async function getSmartContract(
+    txHash: string,
+    blockchain: "ethereum" | "mantle" | "arbitrum",
+  ): Promise<SmartContract> {
+    const params = new URLSearchParams({ txHash, blockchain });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/oft?${params.toString()}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+    if (!res.ok) {
+      throw new Error(`Error fetching estimates: ${res.statusText}`);
+    }
+    const data = await res.json();
+
+    return {
+      ...data,
+      blockchain: blockchain,
+    };
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async function distribute(
+    smartContracts: SmartContract[],
+  ): Promise<DistributeResult> {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/oft/distribute`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ smartContracts }),
+    });
+    if (!res.ok) throw new Error(`Error distribute: ${res.statusText}`);
+    return res.json();
+  }
 
   return (
     <Box
@@ -48,40 +115,13 @@ export default function Home() {
           <Typography variant="h6" gutterBottom>
             Deployments
           </Typography>
-
-          {deployments ? (
-            <>
-              <Typography>
-                Arbitrum –{" "}
-                <Link
-                  href="https://sepolia.arbiscan.io/address/0x32c1337d6ad10a4d739903426dd8a5f9c1b322d5"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://sepolia.arbiscan.io/address/0x32c1337d6ad10a4d739903426dd8a5f9c1b322d5
-                </Link>
-              </Typography>
-              <Typography>
-                Ethereum –{" "}
-                <Link
-                  href="https://sepolia.etherscan.io/address/0x66cb523542deb4a0b0d9a4d3d7bba2ebe4cfb8a2"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://sepolia.etherscan.io/address/0x66cb523542deb4a0b0d9a4d3d7bba2ebe4cfb8a2
-                </Link>
-              </Typography>
-              <Typography>
-                Mantle –{" "}
-                <Link
-                  href="hhttps://sepolia.mantlescan.xyz/address/0x8dc6b87bd35ebb7cec70de2fbad1b6a0b6913c53"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://sepolia.mantlescan.xyz/address/0x8dc6b87bd35ebb7cec70de2fbad1b6a0b6913c53
-                </Link>
-              </Typography>
-            </>
+          {!loading && smartContracts.length > 0 ? (
+            smartContracts.map((sc) => (
+              <Box key={sc.blockchain + sc.contractAddress} mb={1}>
+                <Typography>{sc.blockchain.toUpperCase()}</Typography>
+                <Typography>{sc.contractAddress}</Typography>
+              </Box>
+            ))
           ) : (
             <LinearProgress />
           )}
@@ -91,8 +131,8 @@ export default function Home() {
           <Typography variant="h6" gutterBottom>
             Last configurations
           </Typography>
-          {configurations ? (
-            <Typography>{configurations}</Typography>
+          {!loading && configStatus ? (
+            <Typography>{configStatus}</Typography>
           ) : (
             <LinearProgress />
           )}

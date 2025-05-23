@@ -15,6 +15,7 @@ import { Step1, Step2, Step3, Step4 } from "./steps";
 import { FormProvider, useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { NebulaChatDrawer } from "../(home)/nebulaChatDrawer";
+import { useDeploymentStore } from "../../stores/deploymentStore";
 
 const steps = ["Initial data", "Configurations", "Distribution", "Payments"];
 
@@ -59,9 +60,51 @@ export const MultiStepForm = () => {
     },
   });
 
-  const onSubmit = methods.handleSubmit((data) => {
-    console.log("Formulario completo:", data);
-  });
+  const setDeployments = useDeploymentStore((s) => s.setDeployments);
+
+  interface Deployment {
+    txHash: string;
+    blockchain: "ethereum" | "mantle" | "arbitrum";
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onSubmit = async (data: QuoteFormValues) => {
+    try {
+      // const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/oft`, {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify(data),
+      // });
+      // if (!res.ok) throw new Error("Error creando OFT");
+      // const deployments = await res.json();
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setLoading(false);
+      const deployments: Deployment[] = [
+        {
+          txHash:
+            "0x0ecbbba9a658b6912c7e38576e0ff43e25860cd6749774674823bde16c013adf",
+          blockchain: "ethereum",
+        },
+        {
+          txHash:
+            "0x53532cf7f9d97e131c6a023d91523af1950da3264242b2c00f9dfa0f6712b501",
+          blockchain: "mantle",
+        },
+        {
+          txHash:
+            "0xc05c8c959b45bb95b1bf82c1898540c121d3703c92d57f00f3a0dfebf00fb6fb",
+          blockchain: "arbitrum",
+        },
+      ];
+      setDeployments(deployments);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      router.push("/deployments");
+    }
+  };
+
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -70,15 +113,6 @@ export const MultiStepForm = () => {
 
   const handleBack = () => {
     if (activeStep > 0) setActiveStep((prev) => prev - 1);
-  };
-
-  const handlePay = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      onSubmit();
-      router.push("/deployments");
-    }, 2000);
   };
 
   const handleOpenDrawer = (theme: string) => {
@@ -108,7 +142,7 @@ export const MultiStepForm = () => {
   return (
     <>
       <FormProvider {...methods}>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Box
             sx={{
               display: "flex",
@@ -155,7 +189,7 @@ export const MultiStepForm = () => {
                   <Button
                     variant="contained"
                     color="secondary"
-                    onClick={handlePay}
+                    onClick={methods.handleSubmit(onSubmit)}
                     disabled={loading}
                   >
                     {loading ? (
