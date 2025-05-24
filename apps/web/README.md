@@ -26,6 +26,11 @@ This is the web application for the **Front Token Deployer**, a tool designed to
 
 4. Open the app in your browser at `http://localhost:3005`.
 
+## Demo
+Check out our demo video to see the Front Token Deployer in action:
+
+<img alt="Front Token Deployer Demo" src="https://img.youtube.com/vi/xcj8AmWRF-s/0.jpg">
+
 ## Usage
 
 1. Fill in the required token details (name, symbol, etc.).
