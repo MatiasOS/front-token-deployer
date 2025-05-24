@@ -1,84 +1,86 @@
-# Turborepo starter
+# Front Token Deployer - Web App
 
-This Turborepo starter is maintained by the Turborepo core team.
+This is the web application for the **Front Token Deployer**, a tool designed to simplify the deployment and management of tokens on blockchain networks.
 
-## Using this example
+## Prerequisites
 
-Run the following command:
+- **Node.js**: Ensure you have Node.js installed (v16 or higher recommended).
+- **Package Manager**: Use `npm` for dependency management.
 
-```sh
-npx create-turbo@latest
-```
+## Installation
 
-## What's inside?
+1. Clone the repository:
+  ```bash
+  git clone https://github.com/your-repo/front-token-deployer.git
+  ```
 
-This Turborepo includes the following packages/apps:
+2. Install dependencies:
+  ```bash
+  npm install
+  ```
 
-### Apps and Packages
+3. Create a `.env` file in the root directory with the following content:
+  ```bash
+  NEXT_PUBLIC_API_URL=http://localhost:3000/api
+  ```
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+  Adjust the API URL according to your setup if needed.
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+4. Start the development server:
+  ```bash
+  npm run dev
+  ```
 
-### Utilities
+5. Open the app in your browser at `http://localhost:3005`.
 
-This Turborepo has some additional tools already setup for you:
+## Demo
+Check out our demo video to see the Front Token Deployer in action:
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+<img alt="Front Token Deployer Demo" src="https://img.youtube.com/vi/xcj8AmWRF-s/0.jpg">
 
-### Build
+## AI Assistant - Nebula
+Our platform includes an integrated AI chat assistant named Nebula that can help you with:
 
-To build all apps and packages, run the following command:
+  - Understanding token deployment concepts
+  - Answering questions about blockchain networks
+  - Providing guidance on token parameters
 
-```
-cd my-turborepo
-pnpm build
-```
+## Usage
 
-### Develop
+  ### Token Configuration
+  1. **Basic Token Details**:
+      - **Select Blockchain Network**: Choose from the supported chains where you want to deploy your token (e.g., Ethereum, Mantle, Arbitrum).
+      - **Select Protocols**: Specify the protocols or standards your token should adhere to (e.g., OFT).
+      - **Token Name**: Enter a meaningful name for your token (e.g., "My Sample Token")
+      - **Token Symbol**: Choose a short symbol (typically 3-4 characters, e.g., "MST")
 
-To develop all apps and packages, run the following command:
+  2. **Token Properties**:
+    - **Ownable**: Toggle this option if you want to transfer the contract ownership control functions. *(Not implemented yet)*
+      - When *enabled*, the owner can perform privileged operations like pausing transfers or minting new tokens
+      - When *disabled*, the contract has no special administrator
 
-```
-cd my-turborepo
-pnpm dev
-```
+  3. **Distribution**:
+    - For each network you'll need configure:
+      - **Address**: Enter the wallet address that will own the deployed token on that network.
+      - **Amount**: Set the number of tokens to be created at deployment on that network.
 
-### Remote Caching
+  4. **Review & Deploy**:
+      - Verify all information on the payment screen before proceeding. 
+      - Confirm the deployment transaction.
+      - Monitor deployment status on the resume screen.
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+  5. **Post-Deployment**:
+    Once deployment is successful, you'll see the contract address. Save this information for future reference. 
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+## Scripts
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+- `npm run dev`: Start the development server.
+- `npm run build`: Build the app.
 
-```
-cd my-turborepo
-npx turbo login
-```
+## License
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+This project is licensed under the [MIT License](LICENSE).
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+## Contact
 
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+For questions or support, please contact the development team at `https://x.com/mati_os_eth`.
