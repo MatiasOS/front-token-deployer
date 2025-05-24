@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# Front Token Deployer - Web App
 
-## Getting Started
+This is the web application for the **Front Token Deployer**, a tool designed to simplify the deployment and management of tokens on blockchain networks.
 
-First, run the development server:
+## Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Node.js**: Ensure you have Node.js installed (v16 or higher recommended).
+- **Package Manager**: Use `npm` or `yarn` for dependency management.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
+  ```bash
+  git clone https://github.com/your-repo/front-token-deployer.git
+  cd front-token-deployer/apps/web
+  ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
+2. Install dependencies:
+  ```bash
+  npm install
+  ```
 
-## Learn More
+3. Start the development server:
+  ```bash
+  npm run dev
+  ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Open the app in your browser at `http://localhost:3005`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Usage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Fill in the required token details (name, symbol, etc.).
+2. Select whether you want the token to have the "Ownable" property (allows ownership control).
+3. Provide the following details for deployment. For each blockchain:
+  - **Owner Address**: The wallet address that will own the deployed token on the blockchain selected.
+  - **Amount**: The total number of tokens to be minted.
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `npm run dev`: Start the development server.
+- `npm run build`: Build the app.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Contact
+
+For questions or support, please contact the development team at `matias.ovejasmith@gmail.com `.
