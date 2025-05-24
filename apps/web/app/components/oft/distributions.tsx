@@ -11,21 +11,16 @@ interface OFTDistributionProps {
 async function fetchDistribution(
   oftAddress: SmartContractAddress[],
 ): Promise<unknown> {
-  // const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/oft/deploy`, {
-  //   method: "POST",
-  //   headers: { "Content-Type": "application/json" },
-  //   body: JSON.stringify(oftAddress),
-  // });
-  // if (!response.ok) throw new Error("Error creating OFT");
-  // return response.json();
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve({
-        message: "Distribution fetched successfully",
-        data: oftAddress,
-      });
-    }, 2000);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/oft/configure`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      configurations: oftAddress
+        .map(({contractAddress, blockchain})=> ({address: contractAddress, blockchain}))
+    }),
   });
+  if (!response.ok) throw new Error("Error creating OFT");
+  return response.json();
 }
 
 export const OFTDistribution = ({
@@ -50,12 +45,12 @@ export const OFTDistribution = ({
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
-        Distributions
+        Configurations
       </Typography>
-      {!oftAddress || loading ? (
+      {!oftAddress.length || !distribution || loading ? (
         <LinearProgress />
       ) : (
-        <Typography>Ok</Typography>
+        <Typography>Done</Typography>
       )}
     </Box>
   );

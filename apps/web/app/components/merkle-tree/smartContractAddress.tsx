@@ -13,6 +13,8 @@ async function getSmartContractAddress(
   txHash: string,
   blockchain: "ethereum" | "mantle" | "arbitrum",
 ): Promise<SmartContractAddress> {
+  await new Promise((resolve) => setTimeout(resolve, 20000));
+
   const params = new URLSearchParams({ txHash, blockchain });
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_URL}/merkle-tree?${params.toString()}`,

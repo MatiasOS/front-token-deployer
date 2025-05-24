@@ -19,7 +19,7 @@ export const NebulaChatDrawer = ({
   const question = theme
     ? `What is ${capitalize(theme)}? Give me a short answer for people that is not an expert`
     : "";
-  const nebulaUrl = process.env.NEXT_PUBLIC_NEBULA_URL!;
+  const nebulaUrl = process.env.NEXT_PUBLIC_URL! + '/nebula';
 
   useEffect(() => {
     if (!open || !question) return;

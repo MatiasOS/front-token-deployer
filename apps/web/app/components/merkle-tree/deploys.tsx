@@ -19,7 +19,7 @@ export const MerkleTreeDeploys = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (deployments || !merkleTree || oftAdrress.length === 0) return;
+    if (deployments || !merkleTree || oftAdrress.length === 0 ) return;
 
     setLoading(true);
 
@@ -63,14 +63,21 @@ export const MerkleTreeDeploys = ({
     fetchAll();
   }, [merkleTree, oftAdrress, deployments, setDeployments]);
 
-  if (loading || !deployments) {
-    return <LinearProgress />;
+  if (loading || !deployments?.length) {
+    return (
+      <Box>
+        <Typography variant="h6" gutterBottom>
+          Deploy txs
+        </Typography>
+        <LinearProgress />
+      </Box>
+    );
   }
 
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
-        Deployments
+        Deploy txs
       </Typography>
       {deployments.map((deployment) => (
         <Box key={deployment.blockchain} mb={1}>

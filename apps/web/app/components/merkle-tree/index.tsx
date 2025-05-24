@@ -35,7 +35,7 @@ async function generateMerkleTree(
   const res = await fetch(`${process.env.NEXT_PUBLIC_URL}/merkle-tree`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(distribution),
+    body: JSON.stringify({distribution}),
   });
   if (!res.ok) {
     console.error("Error creating Merkle-Tree", res);
@@ -90,11 +90,11 @@ export const MerkleTreeSection = ({
       >
         Merkle Tree Summary
       </Typography>
-
+      <Typography variant="h6"> Merkle tree</Typography>
       {loading ? (
         <LinearProgress />
       ) : (
-        <Typography>Merkle Tree generated successfully</Typography>
+        <Typography>Generated successfully</Typography>
       )}
 
       <Divider sx={{ my: 2 }} />
@@ -118,8 +118,10 @@ export const MerkleTreeSection = ({
 
       <MerkleTreeDistribution
         address={address}
+        merkleTree={merkleTree}
         distribution={distribution}
         setDistribution={setDistribution}
+        oftAdrress={oftAdrress}
       />
     </Box>
   );
