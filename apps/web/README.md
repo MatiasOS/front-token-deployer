@@ -12,7 +12,6 @@ This is the web application for the **Front Token Deployer**, a tool designed to
 1. Clone the repository:
   ```bash
   git clone https://github.com/your-repo/front-token-deployer.git
-  cd front-token-deployer/apps/web
   ```
 
 2. Install dependencies:
