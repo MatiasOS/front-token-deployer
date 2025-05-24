@@ -38,13 +38,39 @@ Check out our demo video to see the Front Token Deployer in action:
 
 <img alt="Front Token Deployer Demo" src="https://img.youtube.com/vi/xcj8AmWRF-s/0.jpg">
 
+## AI Assistant - Nebula
+Our platform includes an integrated AI chat assistant named Nebula that can help you with:
+
+  - Understanding token deployment concepts
+  - Answering questions about blockchain networks
+  - Providing guidance on token parameters
+
 ## Usage
 
-1. Fill in the required token details (name, symbol, etc.).
-2. Select whether you want the token to have the "Ownable" property (allows ownership control).
-3. Provide the following details for deployment. For each blockchain:
-  - **Owner Address**: The wallet address that will own the deployed token on the blockchain selected.
-  - **Amount**: The total number of tokens to be minted.
+  ### Token Configuration
+  1. **Basic Token Details**:
+      - **Select Blockchain Network**: Choose from the supported chains where you want to deploy your token (e.g., Ethereum, Mantle, Arbitrum).
+      - **Select Protocols**: Specify the protocols or standards your token should adhere to (e.g., OFT).
+      - **Token Name**: Enter a meaningful name for your token (e.g., "My Sample Token")
+      - **Token Symbol**: Choose a short symbol (typically 3-4 characters, e.g., "MST")
+
+  2. **Token Properties**:
+    - **Ownable**: Toggle this option if you want to transfer the contract ownership control functions. *(Not implemented yet)*
+      - When *enabled*, the owner can perform privileged operations like pausing transfers or minting new tokens
+      - When *disabled*, the contract has no special administrator
+
+  3. **Distribution**:
+    - For each network you'll need configure:
+      - **Address**: Enter the wallet address that will own the deployed token on that network.
+      - **Amount**: Set the number of tokens to be created at deployment on that network.
+
+  4. **Review & Deploy**:
+      - Verify all information on the payment screen before proceeding. 
+      - Confirm the deployment transaction.
+      - Monitor deployment status on the resume screen.
+
+  5. **Post-Deployment**:
+    Once deployment is successful, you'll see the contract address. Save this information for future reference. 
 
 ## Scripts
 
