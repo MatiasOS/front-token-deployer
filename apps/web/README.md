@@ -5,7 +5,7 @@ This is the web application for the **Front Token Deployer**, a tool designed to
 ## Prerequisites
 
 - **Node.js**: Ensure you have Node.js installed (v16 or higher recommended).
-- **Package Manager**: Use `npm` or `yarn` for dependency management.
+- **Package Manager**: Use `npm` for dependency management.
 
 ## Installation
 
@@ -45,4 +45,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contact
 
-For questions or support, please contact the development team at `matias.ovejasmith@gmail.com `.
+For questions or support, please contact the development team at `https://x.com/mati_os_eth`.
