@@ -7,10 +7,12 @@ import {
   Box,
   Divider,
   IconButton,
+  FormHelperText,
 } from "@mui/material";
 import Image from "next/image";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { QuoteFormValues } from "..";
+import { useEffect } from "react";
 
 export const BLOCKCHAINS = [
   {
@@ -49,6 +51,10 @@ export const Step1 = ({ onOpenDrawer }: Step1Props) => {
     formState: { errors },
   } = useFormContext<QuoteFormValues>();
 
+  useEffect(() => {
+    console.log("Errores", errors);
+  }, [errors]);
+
   return (
     <>
       <Grid container spacing={4}>
@@ -61,7 +67,7 @@ export const Step1 = ({ onOpenDrawer }: Step1Props) => {
             control={control}
             rules={{
               validate: (value) =>
-                value?.length > 0 || "Select at least one blockchain",
+                value?.length > 0 ? true : "Select at least one blockchain",
             }}
             render={({ field }) => (
               <Box>
@@ -97,14 +103,17 @@ export const Step1 = ({ onOpenDrawer }: Step1Props) => {
                     </Grid>
                   ))}
                 </Grid>
-                {errors.blockchain && (
+                {errors && (
                   <Typography variant="caption" color="error" mt={1}>
-                    {errors.blockchain.message}
+                    {errors.blockchain?.message}
                   </Typography>
                 )}
               </Box>
             )}
           />
+          {!!errors.blockchain && (
+            <FormHelperText>{errors.blockchain.message}</FormHelperText>
+          )}
         </Grid>
 
         <Divider style={{ width: "100%" }} />
@@ -117,8 +126,7 @@ export const Step1 = ({ onOpenDrawer }: Step1Props) => {
             name="protocol"
             control={control}
             rules={{
-              validate: (value) =>
-                value !== "" || "Select at least one protocol",
+              required: "Select one protocol",
             }}
             render={({ field }) => (
               <Box>

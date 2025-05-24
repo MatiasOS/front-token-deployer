@@ -11,12 +11,17 @@ import {
   CircularProgress,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Step1, Step2, Step3, Step4 } from "./steps";
+import { Step1, Step2, Step3, Step4, Step5 } from "./steps";
 import { FormProvider, useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { NebulaChatDrawer } from "../(home)/nebulaChatDrawer";
 
-const steps = ["Initial data", "Configurations", "Distribution", "Payments"];
+const steps = [
+  "Initial data",
+  "Configurations",
+  "Distribution",
+  "Payments",
+  "Summary",
+];
 
 export type TokenDistribution = {
   blockchain: string;
@@ -39,11 +44,11 @@ export const MultiStepForm = () => {
   const [loading, setLoading] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerTheme, setDrawerTheme] = useState<string | null>(null);
-  const router = useRouter();
   const methods = useForm<QuoteFormValues>({
+    mode: "onBlur",
     defaultValues: {
       blockchain: [],
-      protocol: "",
+      protocol: "OFT",
       name: "",
       symbol: "",
       distributions: [
@@ -59,9 +64,11 @@ export const MultiStepForm = () => {
     },
   });
 
-  const onSubmit = methods.handleSubmit((data) => {
-    console.log("Formulario completo:", data);
-  });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onSubmit = async (data: QuoteFormValues) => {
+    handleNext();
+  };
+
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -70,15 +77,6 @@ export const MultiStepForm = () => {
 
   const handleBack = () => {
     if (activeStep > 0) setActiveStep((prev) => prev - 1);
-  };
-
-  const handlePay = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      onSubmit();
-      router.push("/deployments");
-    }, 2000);
   };
 
   const handleOpenDrawer = (theme: string) => {
@@ -100,6 +98,8 @@ export const MultiStepForm = () => {
         return <Step3 onOpenDrawer={handleOpenDrawer} />;
       case 3:
         return <Step4 />;
+      case 4:
+        return <Step5 />;
       default:
         return null;
     }
@@ -108,7 +108,7 @@ export const MultiStepForm = () => {
   return (
     <>
       <FormProvider {...methods}>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
           <Box
             sx={{
               display: "flex",
@@ -142,38 +142,41 @@ export const MultiStepForm = () => {
 
               {renderStep()}
 
-              <Box mt={4} display="flex" justifyContent="space-between">
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={handleBack}
-                  disabled={activeStep === 0}
-                >
-                  Previous step
-                </Button>
-                {activeStep === steps.length - 1 ? (
+              {activeStep < steps.length - 1 && (
+                <Box mt={4} display="flex" justifyContent="space-between">
                   <Button
-                    variant="contained"
+                    variant="outlined"
                     color="secondary"
-                    onClick={handlePay}
-                    disabled={loading}
+                    onClick={handleBack}
+                    disabled={activeStep === 0}
                   >
-                    {loading ? (
-                      <CircularProgress size={24} color="inherit" />
-                    ) : (
-                      "Pay with Credit Card"
-                    )}
+                    Previous step
                   </Button>
-                ) : (
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={handleNext}
-                  >
-                    Next step
-                  </Button>
-                )}
-              </Box>
+                  {activeStep === steps.length - 2 ? (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={methods.handleSubmit(onSubmit)}
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <CircularProgress size={24} color="inherit" />
+                      ) : (
+                        "Pay with Credit Card"
+                      )}
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={handleNext}
+                      disabled={!methods.formState.isValid}
+                    >
+                      Next step
+                    </Button>
+                  )}
+                </Box>
+              )}
             </Paper>
           </Box>
         </form>

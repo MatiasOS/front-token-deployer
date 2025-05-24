@@ -168,9 +168,7 @@ export const Step4 = () => {
                   <SimpleSummaryRow label={blockchain} />
                   <SimpleSummaryRow
                     label="Contract Creation"
-                    value={formatToUSDCurrency(
-                      contractCreationEstimate,
-                    )}
+                    value={formatToUSDCurrency(contractCreationEstimate)}
                   />
                   <SimpleSummaryRow
                     label="Wiring"
