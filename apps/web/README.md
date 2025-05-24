@@ -19,12 +19,19 @@ This is the web application for the **Front Token Deployer**, a tool designed to
   npm install
   ```
 
-3. Start the development server:
+3. Create a `.env` file in the root directory with the following content:
+  ```bash
+  NEXT_PUBLIC_API_URL=http://localhost:3000/api
+  ```
+
+  Adjust the API URL according to your setup if needed.
+
+4. Start the development server:
   ```bash
   npm run dev
   ```
 
-4. Open the app in your browser at `http://localhost:3005`.
+5. Open the app in your browser at `http://localhost:3005`.
 
 ## Demo
 Check out our demo video to see the Front Token Deployer in action:
